@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.chart.AreaChart?>
+<?import javafx.scene.chart.CategoryAxis?>
+<?import javafx.scene.chart.NumberAxis?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.CheckBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.Separator?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.text.Font?>
+<?import javafx.scene.web.WebView?>
+
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="799.0" prefWidth="1025.0" xmlns="http://javafx.com/javafx/9.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="application.Controller">
+   <children>
+      <Label layoutX="440.0" layoutY="22.0" text="Stock App">
+         <font>
+            <Font size="32.0" />
+         </font>
+      </Label>
+      <TextField fx:id="TextBox" layoutX="51.0" layoutY="33.0" promptText="Please enter ticker " />
+      <Button fx:id="EnterButton" layoutX="239.0" layoutY="33.0" mnemonicParsing="false" onAction="#EnterClick" text="enter" />
+      <AreaChart fx:id="graph" layoutX="51.0" layoutY="340.0">
+        <xAxis>
+          <CategoryAxis side="BOTTOM" />
+        </xAxis>
+        <yAxis>
+          <NumberAxis side="LEFT" />
+        </yAxis>
+      </AreaChart>
+      <Label fx:id="StockPriceLabel" layoutX="84.0" layoutY="150.0" text="0.00" textFill="#00ff22">
+         <font>
+            <Font size="45.0" />
+         </font>
+      </Label>
+      <Label layoutX="79.0" layoutY="111.0" text="Stock price">
+         <font>
+            <Font size="18.0" />
+         </font>
+      </Label>
+      <Label fx:id="ChangeLabel" layoutX="288.0" layoutY="169.0" text="+" textFill="#00ff22" visible="false">
+         <font>
+            <Font size="20.0" />
+         </font>
+      </Label>
+      <Label fx:id="PercentLabel" layoutX="51.0" layoutY="69.0" text="0%" textFill="RED" visible="false">
+         <font>
+            <Font size="18.0" />
+         </font>
+      </Label>
+      <Label layoutX="288.0" layoutY="116.0" text="Percent" />
+      <Button fx:id="CloseButton" layoutX="959.0" layoutY="10.0" mnemonicParsing="false" onAction="#Closeclicker" text="Close" textOverrun="WORD_ELLIPSIS" />
+      <Button fx:id="SaveButton" layoutX="841.0" layoutY="674.0" mnemonicParsing="false" onAction="#SaveClick" prefHeight="66.0" prefWidth="88.0" text="Save to &#10;Database" />
+      <CheckBox fx:id="TodayCheckbox" layoutX="551.0" layoutY="375.0" mnemonicParsing="false" text="Today" />
+      <CheckBox fx:id="MonthTextBox" layoutX="551.0" layoutY="413.0" mnemonicParsing="false" text="Month" />
+      <CheckBox fx:id="YearCheckBox" layoutX="551.0" layoutY="447.0" mnemonicParsing="false" text="Year" />
+      <CheckBox fx:id="LifeTimeCheckBox" layoutX="551.0" layoutY="484.0" mnemonicParsing="false" text="Lifetime" />
+      <Separator layoutX="548.0" layoutY="346.0" orientation="VERTICAL" prefHeight="365.0" prefWidth="6.0" />
+      <Label fx:id="CompanyNameLabel" layoutX="95.0" layoutY="259.0" text="Company Name">
+         <font>
+            <Font size="31.0" />
+         </font>
+      </Label>
+      <ImageView fx:id="GreenArrow" fitHeight="150.0" fitWidth="173.0" layoutX="722.0" layoutY="355.0" pickOnBounds="true" preserveRatio="true" visible="false">
+         <image>
+            <Image url="@green-up-arrow-md.png" />
+         </image>
+      </ImageView>
+      <ImageView fx:id="RedArrow" fitHeight="150.0" fitWidth="200.0" layoutX="722.0" layoutY="372.0" pickOnBounds="true" preserveRatio="true" visible="false">
+         <image>
+            <Image url="@red-down-arrow-md.png" />
+         </image>
+      </ImageView>
+      <WebView fx:id="WebView1" layoutX="68.0" layoutY="344.0" prefHeight="400.0" prefWidth="483.0" visible="false" />
+   </children>
+</AnchorPane>

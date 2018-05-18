@@ -8,16 +8,22 @@ import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.chart.AreaChart;
 import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
+import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.image.ImageView;
 import javafx.scene.paint.Color;
+import javafx.scene.control.TableColumn;
 import javafx.scene.web.WebView;
 import javafx.scene.web.WebEngine;
+import javafx.scene.control.TableView;
+import javafx.fxml.Initializable;
 
 import org.jsoup.Jsoup;
 //import org.jsoup.helper.Validate;
@@ -27,6 +33,8 @@ import org.jsoup.select.Elements;
 import java.io.IOException;
 import java.sql.Connection;
 import java.sql.DriverManager;
+import java.time.LocalDateTime;
+import java.sql.*;
 
 import javax.swing.JOptionPane;
 
@@ -79,13 +87,57 @@ public class Controller {
 		    
 		    @FXML
 		    private WebView WebView1;
+		    
+		    @FXML
+		    private TableView<Data> Tableview1;
+		    
+		    @FXML
+		    private TableColumn<Data, String> PriceC;
+
+		    @FXML
+		    private TableColumn<Data, String> DateC;
+
+		    @FXML
+		    private TableColumn<Data, String> CompanyC;
+		    
+		    private ObservableList<Data> list;
+
 
 		    
 		    @FXML
 		    public void Closeclicker() {
-		    	System.out.println("Success!");
+		    	try {
+		    	Connection MyConn = DriverManager.getConnection("jdbc:mysql://dunwoody1234.cqnu4iqybkyl.us-east-2.rds.amazonaws.com:3306/Dunwoody","Zack4888","Password01");
+		    	Tableview1.setEditable(true);
+		    	Statement stmt = MyConn.createStatement();
+		    	WebView1.setVisible(false);
+		    	graph.setVisible(false);
+		    	Tableview1.setVisible(true);
+		    	
+		    	String thing0 = "SELECT Price, Date, Company FROM StockSaves";
+		    	
+		    	ResultSet Data1 = stmt.executeQuery(thing0);
+		    	list = FXCollections.observableArrayList();
+		    	while(Data1.next()) {
+		    		 list.add(new Data(Data1.getString("Price"),Data1.getString("Date"),Data1.getString("Company")));
+		    		 System.out.println(Data1.getString("Price")+Data1.getString("Date")+Data1.getString("Company"));
+		    	}
+		    	
+		    	PriceC.setCellValueFactory(new PropertyValueFactory<Data,String>("PRICE"));
+		    	DateC.setCellValueFactory(new PropertyValueFactory<>("Date"));
+		    	CompanyC.setCellValueFactory(new PropertyValueFactory<>("Company"));
+		    
+		    	
+		    	Tableview1.setItems(null);
+		    	Tableview1.setItems(list);
+		    	System.out.println(list.toString());
 		    	
 		    	
+		    	String Read = "";
+		    	}
+		    	catch(Exception E) {
+		    		E.printStackTrace();
+		    	}
 		    }
 		    public void EnterClick() {
 		    	try {
@@ -93,6 +145,8 @@ public class Controller {
 		    		String test;
 		    	    String Thing1;
 		    	    String Thing2 = TextBox.getText();
+		    	    
+		    	    Tableview1.setVisible(false);
 		    	    
 		    		Document Doc = Jsoup.connect("https://finance.yahoo.com/quote/"+Thing2+"?p="+Thing2).get();
 		    	    
@@ -138,7 +192,7 @@ public class Controller {
 		    		graph.setVisible(false);
 		    		WebEngine Engine = WebView1.getEngine();
 		    		Engine.load("https://finance.yahoo.com/quote/"+Thing2+"?p="+Thing2);
-		    		Engine.loadContent(Doc.getElementsByAttribute("smartphone_Mt(40px)").html());
+		    		Engine.loadContent(Doc.getElementsByClass("Bxz(bb) D(ib) Va(t) Mih(250px)--lgv2 W(100%) Mt(-6px) Mt(0px)--mobp Mt(0px)--mobl W(49%)--lgv2 Mend(30px)--lgv2").html());
 		    		
 		    		}
 		    	
@@ -159,12 +213,17 @@ public class Controller {
 		    public void SaveClick() {
 		    	try {
 		    		Connection MyConn = DriverManager.getConnection("jdbc:mysql://dunwoody1234.cqnu4iqybkyl.us-east-2.rds.amazonaws.com:3306/Dunwoody","Zack4888","Password01");
-					System.out.println("database connected ");
-					
+		    		Statement InsertTable = MyConn.createStatement();
+		    		
+		    		String Insert = "INSERT INTO StockSaves (Price, Date, Company) VALUES('"+StockPriceLabel.getText()+"','"+LocalDateTime.now()+"','"+CompanyNameLabel.getText()+"')";
+		    		InsertTable.executeUpdate(Insert);
+					JOptionPane.showMessageDialog(null,"Saved to database");
+					MyConn.close();
 					
 		    	}
 		    	catch(Exception e) {
 		    		e.printStackTrace();
+		    		JOptionPane.showMessageDialog(null,"Could not connect to database");
 		    	}
 		    	
 		    }
